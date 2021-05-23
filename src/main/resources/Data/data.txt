@@ -1,0 +1,5 @@
+1.{shipment:[{Orange,Perishable},{Apple,Perishable},{Pineapple,Perishable},{watermelon,Perishable},{Melon,Perishable}]}
+2.{shipment:[{Milk,Perishable},{Kefir,Perishable},{Sour Cream,Perishable}]}
+3.{shipment:[{Chair,Not perishable},{Bed,Not Perishable},{curtain,not Perishable},{table,not Perishable},{monitor,not Perishable},{shelf,not Perishable}]}
+4.{shipment:[]}
+5.{shipment:[{Bed,not Perishable},{Chair,not Perishable},{Orange,Perishable},{sink,not Perishable}]}

@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Objects;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,15 +18,16 @@ public class TextReader implements CustomReader {
     private final static Logger logger = LogManager.getLogger();
 
     @Override
-    public String read(String fileName) throws MultiThreadingException {
+    public List<String> read(String fileName) throws MultiThreadingException {
         checkPath(fileName);
-        String text;
+        List<String> validStrings;
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-            text = stream.map(Objects::toString).collect(Collectors.joining("\n"));
-            return text;
+            validStrings = stream.collect(Collectors.toList());
         } catch (IOException exception) {
             throw new MultiThreadingException(exception);
         }
+
+        return validStrings;
     }
 
     private void checkPath(String fileName) throws MultiThreadingException {

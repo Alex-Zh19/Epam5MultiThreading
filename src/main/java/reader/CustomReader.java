@@ -2,6 +2,8 @@ package reader;
 
 import exception.MultiThreadingException;
 
+import java.util.List;
+
 public interface CustomReader {
-    String read(String fileName) throws MultiThreadingException;
+    List<String> read(String fileName) throws MultiThreadingException;
 }
