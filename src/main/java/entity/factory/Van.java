@@ -1,23 +1,31 @@
 package entity.factory;
 
 
-import java.util.concurrent.Callable;
+import entity.Base;
 
-public class Van implements Callable {
+public class Van extends Thread {
     private long id;
     private int countOfBox;
+    private boolean isPerishable;
 
     protected Van() {
     }
 
-    protected Van(long id, int count) {
+    protected Van(long id, int count, boolean isPerishable) {
+        if (isPerishable) {
+            this.setPriority(MAX_PRIORITY);
+        } else {
+            this.setPriority(NORM_PRIORITY);
+        }
         this.id = id;
         countOfBox = count;
+        this.isPerishable = isPerishable;
     }
 
     protected Van(Van baseVan) {
         this.id = baseVan.id;
         this.countOfBox = baseVan.countOfBox;
+        this.isPerishable = baseVan.isPerishable;
     }
 
     public void add() {
@@ -32,6 +40,13 @@ public class Van implements Callable {
         return countOfBox;
     }
 
+    public void setCountOfBox(int count) {
+        this.countOfBox = count;
+    }
+
+    public Boolean getIsPerishable() {
+        return isPerishable;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -59,8 +74,14 @@ public class Van implements Callable {
         return result.toString();
     }
 
+
     @Override
-    public Object call() throws Exception {
-        return null;
+    public void run() {
+        System.out.println("thread begins "+this);
+        Base base = Base.getInstance();
+        base.setCountOfBox(base.getCountOfBox() + this.countOfBox);
+        this.countOfBox = 0;
+
     }
+
 }

@@ -10,12 +10,12 @@ public class VanFactory {
 
     public static Van createVan() {
         int id = IdGenerator.generateId();
-        return new Van(id, DEFAULT_COUNT_OF_BOX);
+        return new Van(id, DEFAULT_COUNT_OF_BOX, false);
     }
 
-    public static Van createVan(Integer countOfBox) {
+    public static Van createVan(Integer countOfBox, Boolean isPerishable) {
         int id = IdGenerator.generateId();
-        return new Van(id, countOfBox);
+        return new Van(id, countOfBox, isPerishable);
     }
 
     public static Van createVan(Van baseVan){
@@ -26,7 +26,12 @@ public class VanFactory {
         List<Van> resultVanList = new ArrayList<>();
         for (Integer countOfBox : countOfBoxList) {
             int id = IdGenerator.generateId();
-            Van newVan = new Van(id, countOfBox);
+            Van newVan;
+            if (id % 2 == 0) {
+                newVan = new Van(id, countOfBox, true);
+            } else {
+                newVan = new Van(id, countOfBox, false);
+            }
             resultVanList.add(newVan);
         }
         return resultVanList;
