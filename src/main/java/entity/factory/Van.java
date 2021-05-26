@@ -9,6 +9,7 @@ public class Van extends Thread {
     private boolean isPerishable;
 
     protected Van() {
+        start();
     }
 
     protected Van(long id, int count, boolean isPerishable) {
@@ -20,12 +21,15 @@ public class Van extends Thread {
         this.id = id;
         countOfBox = count;
         this.isPerishable = isPerishable;
+        this.start();
     }
 
     protected Van(Van baseVan) {
         this.id = baseVan.id;
         this.countOfBox = baseVan.countOfBox;
         this.isPerishable = baseVan.isPerishable;
+        this.setPriority(baseVan.getPriority());
+        this.start();
     }
 
     public void add() {
