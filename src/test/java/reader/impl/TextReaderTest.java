@@ -12,7 +12,7 @@ import java.util.List;
 import static org.testng.Assert.*;
 
 public class TextReaderTest {
-    final static String PATH_TO_FILE = "DataTest/dataTest.txt";
+    final static String PATH_TO_FILE = "dataTest/dataTest.txt";
     @Test
     public void testRead() {
         CustomReader reader = new TextReader();
