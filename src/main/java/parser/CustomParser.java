@@ -1,5 +1,7 @@
 package parser;
 
-public interface CustomParser {
+import java.util.List;
 
+public interface CustomParser {
+    List<Integer> parseText(List<String> validStrings);
 }

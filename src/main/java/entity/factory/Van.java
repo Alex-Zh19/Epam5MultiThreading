@@ -3,33 +3,28 @@ package entity.factory;
 
 import entity.Base;
 
-public class Van extends Thread {
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+
+public class Van implements Callable {
     private long id;
     private int countOfBox;
     private boolean isPerishable;
 
     protected Van() {
-        start();
     }
 
     protected Van(long id, int count, boolean isPerishable) {
-        if (isPerishable) {
-            this.setPriority(MAX_PRIORITY);
-        } else {
-            this.setPriority(NORM_PRIORITY);
-        }
         this.id = id;
         countOfBox = count;
         this.isPerishable = isPerishable;
-        this.start();
     }
+
 
     protected Van(Van baseVan) {
         this.id = baseVan.id;
         this.countOfBox = baseVan.countOfBox;
         this.isPerishable = baseVan.isPerishable;
-        this.setPriority(baseVan.getPriority());
-        this.start();
     }
 
     public void add() {
@@ -78,14 +73,15 @@ public class Van extends Thread {
         return result.toString();
     }
 
-
     @Override
-    public void run() {
-        System.out.println("thread begins "+this);
+    public Boolean call() throws InterruptedException {
+        System.out.println("thread started: " + this);
         Base base = Base.getInstance();
-        base.setCountOfBox(base.getCountOfBox() + this.countOfBox);
-        this.countOfBox = 0;
-
+        base.setCountOfBox(base.getCountOfBox() + countOfBox);
+        countOfBox = 0;
+        TimeUnit.SECONDS.sleep(2);
+        System.out.println("thread sleep: "+this);
+        return true;
     }
 
 }

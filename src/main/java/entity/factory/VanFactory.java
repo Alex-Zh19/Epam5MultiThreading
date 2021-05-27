@@ -18,6 +18,10 @@ public class VanFactory {
         return new Van(id, countOfBox, isPerishable);
     }
 
+    public static Van createVan(int id,Integer countOfBox, Boolean isPerishable) {
+        return new Van(id, countOfBox, isPerishable);
+    }
+
     public static Van createVan(Van baseVan){
         return new Van(baseVan);
     }

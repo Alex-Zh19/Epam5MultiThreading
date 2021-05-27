@@ -2,16 +2,19 @@ package entity;
 
 import entity.factory.Van;
 import entity.factory.VanFactory;
+import exception.MultiThreadingException;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Base {
     private static final Base instance = new Base();
     private final Deque<Van> vanDeque = new ArrayDeque<>();
-    private final int MAX_COUNT_OF_VAN=10;
-    private final int MAX_COUNT_OF_BOX=40;
+    private final int MAX_COUNT_OF_VAN = 3;
+    private final int MAX_COUNT_OF_BOX = 40;
     private static int countOfBox=0;
 
     private Base() {
@@ -53,12 +56,19 @@ public class Base {
         return MAX_COUNT_OF_BOX;
     }
 
-    public void setCountOfBox(int count){
-        countOfBox+=count;
+    public void setCountOfBox(int count) {
+        countOfBox += count;
     }
 
-    public int getCountOfBox(){
+    public int getCountOfBox() {
         return countOfBox;
     }
 
+    public void start() throws MultiThreadingException {
+        ExecutorService executorService = Executors.newFixedThreadPool(MAX_COUNT_OF_VAN);
+        for (Van van : vanDeque) {
+            executorService.submit(van);
+        }
+        executorService.shutdown();
+    }
 }

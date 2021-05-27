@@ -1,17 +1,31 @@
 package main;
 
-import entity.InformationWrapping;
+import entity.Base;
+import entity.factory.VanFactory;
+import exception.MultiThreadingException;
+import parser.CustomParser;
+import parser.impl.TextParser;
+import reader.CustomReader;
+import reader.impl.TextReader;
+
+import java.io.File;
+import java.net.URL;
+import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
-       /* Van van=new Van();
-        Product product=new Product("orange",true);
-        Product product1=new Product("milk",true);
-        van.add(product);
-        van.add(product1);
-        System.out.println(van);*/
+    final static String PATH_TO_FILE = "data/data.txt";
 
-        String name="name";
-        boolean ispe=true;
+    public static void main(String[] args) throws MultiThreadingException {
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        URL pathToFileUrl = classLoader.getResource(PATH_TO_FILE);
+
+        CustomReader reader = new TextReader();
+        List<String> stringFromFile =
+                reader.read(new File(pathToFileUrl.getFile()).getAbsolutePath());
+        CustomParser parser=new TextParser();
+        List<Integer>integers=parser.parseText(stringFromFile);
+        Base base=Base.getInstance();
+        base.addAll(VanFactory.createVan(integers));
+        base.start();
     }
 }
