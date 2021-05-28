@@ -11,11 +11,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VanQueue {
     private final Deque<Van> vanDeque = new ArrayDeque<>();
-    private static final AtomicBoolean mark = new AtomicBoolean(true);
 
     public void add(Van van) {
         vanDeque.addLast(van);
