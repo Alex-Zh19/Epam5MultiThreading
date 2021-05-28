@@ -29,7 +29,7 @@ public class Main {
         CustomParser parser = new TextParser();
         List<Integer> integers = parser.parseText(stringFromFile);
 
-        VanQueue vanQueue = VanQueue.getInstance();
+        VanQueue vanQueue = new VanQueue();
         vanQueue.addAll(VanFactory.createVan(integers));
 
         Base base = Base.getInstance();

@@ -14,21 +14,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VanQueue {
-    private static VanQueue vanQueue;
     private final Deque<Van> vanDeque = new ArrayDeque<>();
     private static final AtomicBoolean mark = new AtomicBoolean(true);
-
-    private VanQueue(){
-    }
-
-    public static VanQueue getInstance() {
-        if (vanQueue == null) {
-            if (mark.compareAndSet(true, false)) {
-                vanQueue = new VanQueue();
-            }
-        }
-        return vanQueue;
-    }
 
     public void add(Van van) {
         vanDeque.addLast(van);
@@ -38,17 +25,12 @@ public class VanQueue {
         vanDeque.addAll(vanList);
     }
 
-    public Van getFirst() {
-        Van van = vanDeque.getFirst();
+    public Van get() {
+        Van van = vanDeque.pollFirst();
         Van vanToSaveOriginalVan = VanFactory.createVan(van);
         return vanToSaveOriginalVan;
     }
 
-    public Van getLast() {
-        Van van = vanDeque.getLast();
-        Van vanToSaveOriginalVan = VanFactory.createVan(van);
-        return vanToSaveOriginalVan;
-    }
 
     public int countOfVanInQueue() {
         return vanDeque.size();
@@ -57,15 +39,19 @@ public class VanQueue {
     public void startVanUploading() throws InterruptedException, ExecutionException {
         ExecutorService executorService = Executors.newFixedThreadPool(vanDeque.size());
         ExecutorService findReadyTerminalService = Executors.newSingleThreadScheduledExecutor();
-
-        for (Van van : vanDeque) {
+        Deque<Van> copy = new ArrayDeque<>(vanDeque);
+        boolean mark=true;
+        while (vanDeque.size() != 0) {
+            Van van = vanDeque.pop();
             Terminal terminal = null;
             while (terminal == null) {
                 terminal = findReadyTerminalService.submit(findReadyTerminal).get();
             }
-            if (terminal != null) {
-                executorService.submit(van);
-                terminal.isBusy.set(false);
+            executorService.submit(van);
+            terminal.isBusy.set(false);
+            if(mark&&vanDeque.size()==1){
+                vanDeque.addAll(copy);
+                mark=false;
             }
         }
         executorService.shutdown();
