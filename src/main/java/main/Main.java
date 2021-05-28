@@ -29,7 +29,7 @@ public class Main {
         CustomParser parser = new TextParser();
         List<Integer> integers = parser.parseText(stringFromFile);
 
-        VanQueue vanQueue = new VanQueue();
+        VanQueue vanQueue = VanQueue.getInstance();
         vanQueue.addAll(VanFactory.createVan(integers));
 
         Base base = Base.getInstance();
@@ -46,5 +46,6 @@ public class Main {
         }catch (ExecutionException e){
             System.out.println("execution exception");
         }
+        System.out.println(Base.getInstance().getCountOfBox());
     }
 }

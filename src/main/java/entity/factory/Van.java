@@ -2,6 +2,7 @@ package entity.factory;
 
 
 import entity.Base;
+import entity.VanQueue;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -78,9 +79,16 @@ public class Van implements Callable {
         System.out.println("thread started: " + this);
         Base base = Base.getInstance();
         base.setCountOfBox(base.getCountOfBox() + countOfBox);
-        countOfBox = 0;
+        VanQueue queue = VanQueue.getInstance();
         TimeUnit.SECONDS.sleep(2);
-        System.out.println("thread sleep: "+this);
+        queue.add(this);
+        if (countOfBox >= 5) {
+            this.setCountOfBox(countOfBox - 5);
+        } else {
+            this.setCountOfBox(countOfBox);
+        }
+        countOfBox = 0;
+        System.out.println("thread sleep: " + this);
         return true;
     }
 

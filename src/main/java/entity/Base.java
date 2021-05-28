@@ -8,7 +8,7 @@ public class Base {
     private static Base instance;
     private static final AtomicBoolean mark = new AtomicBoolean(true);
     private final Deque<Terminal> terminalQueue = new ArrayDeque();
-    private final int MAX_COUNT_OF_BOX = 70;
+    private final int MAX_COUNT_OF_BOX = 400;
     private static int countOfBox = 0;
 
     private Base() {
@@ -49,7 +49,8 @@ public class Base {
     public Terminal findReadyTerminal() {
 
         for (Terminal terminal : terminalQueue) {
-            if (Terminal.isBusy.get()==false) {
+            if (terminal.isBusy.get()==false) {
+                terminal.isBusy.set(true);
                 return terminal;
             }
         }

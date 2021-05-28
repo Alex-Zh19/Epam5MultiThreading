@@ -11,9 +11,24 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VanQueue {
+    private static VanQueue vanQueue;
     private final Deque<Van> vanDeque = new ArrayDeque<>();
+    private static final AtomicBoolean mark = new AtomicBoolean(true);
+
+    private VanQueue(){
+    }
+
+    public static VanQueue getInstance() {
+        if (vanQueue == null) {
+            if (mark.compareAndSet(true, false)) {
+                vanQueue = new VanQueue();
+            }
+        }
+        return vanQueue;
+    }
 
     public void add(Van van) {
         vanDeque.addLast(van);
@@ -47,8 +62,11 @@ public class VanQueue {
             Terminal terminal = findReadyTerminalService.submit(findReadyTerminal).get();
             if(terminal!=null) {
                 executorService.submit(van);
+                terminal.isBusy.set(false);
             }
         }
+        executorService.shutdown();
+        findReadyTerminalService.shutdown();
     }
 
     Callable<Terminal> findReadyTerminal = new Callable<Terminal>() {
