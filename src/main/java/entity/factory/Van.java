@@ -81,13 +81,12 @@ public class Van implements Callable {
         base.setCountOfBox(base.getCountOfBox() + countOfBox);
         VanQueue queue = VanQueue.getInstance();
         TimeUnit.SECONDS.sleep(2);
-        queue.add(this);
-        if (countOfBox >= 5) {
+        if (countOfBox - 5 >= 0) {
             this.setCountOfBox(countOfBox - 5);
+            queue.add(this);
         } else {
-            this.setCountOfBox(countOfBox);
+            this.setCountOfBox(0);
         }
-        countOfBox = 0;
         System.out.println("thread sleep: " + this);
         return true;
     }

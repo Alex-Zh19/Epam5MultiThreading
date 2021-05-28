@@ -59,8 +59,11 @@ public class VanQueue {
         ExecutorService findReadyTerminalService = Executors.newSingleThreadScheduledExecutor();
 
         for (Van van : vanDeque) {
-            Terminal terminal = findReadyTerminalService.submit(findReadyTerminal).get();
-            if(terminal!=null) {
+            Terminal terminal = null;
+            while (terminal == null) {
+                terminal = findReadyTerminalService.submit(findReadyTerminal).get();
+            }
+            if (terminal != null) {
                 executorService.submit(van);
                 terminal.isBusy.set(false);
             }
