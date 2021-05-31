@@ -39,12 +39,10 @@ public class Main {
         base.addTerminal(terminal3);
         try {
             vanQueue.startVanUploading();
-            System.out.println(vanQueue);
         }catch (InterruptedException e){
             System.out.println("interrupted exception");
         }catch (ExecutionException e){
             System.out.println("execution exception");
         }
-        System.out.println(Base.getInstance().getCountOfBox());
     }
 }

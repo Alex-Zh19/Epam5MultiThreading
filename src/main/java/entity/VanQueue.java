@@ -36,27 +36,24 @@ public class VanQueue {
     }
 
     public void startVanUploading() throws InterruptedException, ExecutionException {
-        ExecutorService executorService = Executors.newFixedThreadPool(vanQueue.size());
+        ExecutorService executorService = Executors.newFixedThreadPool(6);
         ExecutorService findReadyTerminalService = Executors.newSingleThreadScheduledExecutor();
-        Deque<Van> copy = new ArrayDeque<>(vanQueue);
-        boolean mark = true;
+        Queue<Van> copy = new ArrayDeque<>(vanQueue);
         while (vanQueue.size() != 0) {
             Van van = vanQueue.poll();
             Optional<Terminal> optionalTerminal = Optional.empty();
+
             lockToFindReadyTerminal.lock();
             while (optionalTerminal.isEmpty()) {
                 optionalTerminal = findReadyTerminalService.submit(findReadyTerminal).get();
             }
             Terminal terminal = optionalTerminal.get();
             lockToFindReadyTerminal.unlock();
+
             lockToUploadVan.lock();
             executorService.submit(van);
             lockToUploadVan.unlock();
             terminal.isBusy.set(false);
-            if (mark && vanQueue.size() == 1) {
-                vanQueue.addAll(copy);
-                mark = false;
-            }
         }
         executorService.shutdown();
         findReadyTerminalService.shutdown();

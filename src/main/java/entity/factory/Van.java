@@ -3,11 +3,15 @@ package entity.factory;
 
 import entity.Base;
 import entity.VanState;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 public class Van implements Callable {
+    private static final Logger logger = LogManager.getLogger();
     private long id;
     private int countOfBox;
     private boolean isPerishable;
@@ -82,16 +86,33 @@ public class Van implements Callable {
     }
 
     @Override
+    public Van clone() {
+        Van newVan = null;
+        try {
+            newVan = (Van) super.clone();
+        } catch (CloneNotSupportedException exception) {
+            logger.log(Level.ERROR, "Clone is not supported", exception);
+        }
+        return newVan;
+    }
+
+    @Override
     public Boolean call() throws InterruptedException {
-        System.out.println("thread started: " + this);
+        logger.log(Level.INFO, "thread started: {}", this);
         Base base = Base.getInstance();
         switch (state) {
-            case LOAD -> base.setCountOfBox(base.getCountOfBox() - countOfBox);
-            case UNLOAD -> base.setCountOfBox(base.getCountOfBox() + countOfBox);
+            case LOAD -> {
+                base.setCountOfBox(base.getCountOfBox() - countOfBox);
+                this.countOfBox += countOfBox;
+            }
+            case UNLOAD -> {
+                base.setCountOfBox(base.getCountOfBox() + countOfBox);
+                this.countOfBox -= countOfBox;
+            }
         }
 
         TimeUnit.SECONDS.sleep(2);
-        System.out.println("thread sleep: " + this);
+        logger.log(Level.INFO, "thread sleep: {}", this);
         return true;
     }
 
