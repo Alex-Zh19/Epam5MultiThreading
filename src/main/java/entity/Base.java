@@ -2,14 +2,16 @@ package entity;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Base {
     private static Base instance;
     private static final AtomicBoolean mark = new AtomicBoolean(true);
     private final Deque<Terminal> terminalQueue = new ArrayDeque();
     private final int MAX_COUNT_OF_BOX = 400;
-    private static int countOfBox = 0;
+    private static final AtomicInteger countOfBox = new AtomicInteger(200);
 
     private Base() {
     }
@@ -25,17 +27,17 @@ public class Base {
 
     public void setCountOfBox(int count) {
         if (count >= MAX_COUNT_OF_BOX) {
-            countOfBox = MAX_COUNT_OF_BOX;
+            countOfBox.set(MAX_COUNT_OF_BOX);
         } else if (count <= 0) {
-            countOfBox = 0;
+            countOfBox.set(0);
         } else {
-            countOfBox = count;
+            countOfBox.set(count);
         }
 
     }
 
     public int getCountOfBox() {
-        return countOfBox;
+        return countOfBox.get();
     }
 
     public Terminal getTerminal() {
@@ -46,15 +48,17 @@ public class Base {
         terminalQueue.addLast(terminal);
     }
 
-    public Terminal findReadyTerminal() {
-
-        for (Terminal terminal : terminalQueue) {
-            if (terminal.isBusy.get()==false) {
-                terminal.isBusy.set(true);
+    public Optional<Terminal> findReadyTerminal() {
+        Optional<Terminal>terminal;
+        for (Terminal currentTerminal : terminalQueue) {
+            terminal=Optional.of(currentTerminal);
+            if (!currentTerminal.isBusy.get()) {
+                currentTerminal.isBusy.set(true);
                 return terminal;
             }
         }
-        return null;
+        terminal=Optional.empty();
+        return terminal;
     }
 
 }

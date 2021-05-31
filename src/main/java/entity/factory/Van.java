@@ -2,6 +2,7 @@ package entity.factory;
 
 
 import entity.Base;
+import entity.VanState;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -10,14 +11,16 @@ public class Van implements Callable {
     private long id;
     private int countOfBox;
     private boolean isPerishable;
+    private VanState state;
 
     protected Van() {
     }
 
-    protected Van(long id, int count, boolean isPerishable) {
+    protected Van(long id, int count, boolean isPerishable, VanState state) {
         this.id = id;
         countOfBox = count;
         this.isPerishable = isPerishable;
+        this.state = state;
     }
 
 
@@ -25,6 +28,7 @@ public class Van implements Callable {
         this.id = baseVan.id;
         this.countOfBox = baseVan.countOfBox;
         this.isPerishable = baseVan.isPerishable;
+        this.state = baseVan.state;
     }
 
     public void add() {
@@ -69,6 +73,10 @@ public class Van implements Callable {
         result.append(id);
         result.append(", countOfBox=");
         result.append(countOfBox);
+        result.append(", perishable=");
+        result.append(isPerishable);
+        result.append(", state=");
+        result.append(state);
         result.append("}");
         return result.toString();
     }
@@ -77,7 +85,11 @@ public class Van implements Callable {
     public Boolean call() throws InterruptedException {
         System.out.println("thread started: " + this);
         Base base = Base.getInstance();
-        base.setCountOfBox(base.getCountOfBox() + countOfBox);
+        switch (state) {
+            case LOAD -> base.setCountOfBox(base.getCountOfBox() - countOfBox);
+            case UNLOAD -> base.setCountOfBox(base.getCountOfBox() + countOfBox);
+        }
+
         TimeUnit.SECONDS.sleep(2);
         System.out.println("thread sleep: " + this);
         return true;

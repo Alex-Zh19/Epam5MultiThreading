@@ -9,8 +9,6 @@ import parser.CustomParser;
 import parser.impl.TextParser;
 import reader.CustomReader;
 import reader.impl.TextReader;
-import util.IdGenerator;
-
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -33,14 +31,15 @@ public class Main {
         vanQueue.addAll(VanFactory.createVan(integers));
 
         Base base = Base.getInstance();
-        Terminal terminal1 = new Terminal(IdGenerator.generateTerminalId());
-        Terminal terminal2 = new Terminal(IdGenerator.generateTerminalId());
-        Terminal terminal3 = new Terminal(IdGenerator.generateTerminalId());
+        Terminal terminal1 = new Terminal();
+        Terminal terminal2 = new Terminal();
+        Terminal terminal3 = new Terminal();
         base.addTerminal(terminal1);
         base.addTerminal(terminal2);
         base.addTerminal(terminal3);
         try {
             vanQueue.startVanUploading();
+            System.out.println(vanQueue);
         }catch (InterruptedException e){
             System.out.println("interrupted exception");
         }catch (ExecutionException e){

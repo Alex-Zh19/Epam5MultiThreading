@@ -1,67 +1,76 @@
 package entity;
 
+import entity.comparator.PerishableComparator;
 import entity.factory.Van;
 import entity.factory.VanFactory;
-import exception.MultiThreadingException;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class VanQueue {
-    private final Deque<Van> vanDeque = new ArrayDeque<>();
+    private final Queue<Van> vanQueue = new PriorityQueue<>(new PerishableComparator());
+    private final ReentrantLock lockToUploadVan = new ReentrantLock();
+    private final ReentrantLock lockToFindReadyTerminal = new ReentrantLock();
 
     public void add(Van van) {
-        vanDeque.addLast(van);
+        vanQueue.add(van);
     }
 
     public void addAll(List<Van> vanList) {
-        vanDeque.addAll(vanList);
+        vanQueue.addAll(vanList);
     }
 
     public Van get() {
-        Van van = vanDeque.pollFirst();
+        Van van = vanQueue.poll();
         Van vanToSaveOriginalVan = VanFactory.createVan(van);
         return vanToSaveOriginalVan;
     }
 
 
     public int countOfVanInQueue() {
-        return vanDeque.size();
+        return vanQueue.size();
     }
 
     public void startVanUploading() throws InterruptedException, ExecutionException {
-        ExecutorService executorService = Executors.newFixedThreadPool(vanDeque.size());
+        ExecutorService executorService = Executors.newFixedThreadPool(vanQueue.size());
         ExecutorService findReadyTerminalService = Executors.newSingleThreadScheduledExecutor();
-        Deque<Van> copy = new ArrayDeque<>(vanDeque);
-        boolean mark=true;
-        while (vanDeque.size() != 0) {
-            Van van = vanDeque.pop();
-            Terminal terminal = null;
-            while (terminal == null) {
-                terminal = findReadyTerminalService.submit(findReadyTerminal).get();
+        Deque<Van> copy = new ArrayDeque<>(vanQueue);
+        boolean mark = true;
+        while (vanQueue.size() != 0) {
+            Van van = vanQueue.poll();
+            Optional<Terminal> optionalTerminal = Optional.empty();
+            lockToFindReadyTerminal.lock();
+            while (optionalTerminal.isEmpty()) {
+                optionalTerminal = findReadyTerminalService.submit(findReadyTerminal).get();
             }
+            Terminal terminal = optionalTerminal.get();
+            lockToFindReadyTerminal.unlock();
+            lockToUploadVan.lock();
             executorService.submit(van);
+            lockToUploadVan.unlock();
             terminal.isBusy.set(false);
-            if(mark&&vanDeque.size()==1){
-                vanDeque.addAll(copy);
-                mark=false;
+            if (mark && vanQueue.size() == 1) {
+                vanQueue.addAll(copy);
+                mark = false;
             }
         }
         executorService.shutdown();
         findReadyTerminalService.shutdown();
     }
 
-    Callable<Terminal> findReadyTerminal = new Callable<Terminal>() {
-        @Override
-        public Terminal call() throws MultiThreadingException {
-            Base base = Base.getInstance();
-            Terminal terminal = base.findReadyTerminal();
-            return terminal;
-        }
+
+    Callable<Optional<Terminal>> findReadyTerminal = () -> {
+        Base base = Base.getInstance();
+        Optional<Terminal> terminal = base.findReadyTerminal();
+        return terminal;
     };
+
+    @Override
+    public String toString() {
+        return vanQueue.toString();
+    }
 }
