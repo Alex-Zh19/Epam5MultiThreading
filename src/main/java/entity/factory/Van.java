@@ -17,10 +17,10 @@ public class Van implements Callable {
     private boolean isPerishable;
     private VanState state;
 
-    protected Van() {
+    Van() {
     }
 
-    protected Van(long id, int count, boolean isPerishable, VanState state) {
+    Van(long id, int count, boolean isPerishable, VanState state) {
         this.id = id;
         countOfBox = count;
         this.isPerishable = isPerishable;
@@ -28,7 +28,7 @@ public class Van implements Callable {
     }
 
 
-    protected Van(Van baseVan) {
+    Van(Van baseVan) {
         this.id = baseVan.id;
         this.countOfBox = baseVan.countOfBox;
         this.isPerishable = baseVan.isPerishable;
