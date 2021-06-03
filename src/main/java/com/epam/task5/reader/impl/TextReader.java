@@ -1,10 +1,10 @@
-package reader.impl;
+package com.epam.task5.reader.impl;
 
-import exception.MultiThreadingException;
+import com.epam.task5.exception.MultiThreadingException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import reader.CustomReader;
+import com.epam.task5.reader.CustomReader;
 
 import java.io.File;
 import java.io.IOException;

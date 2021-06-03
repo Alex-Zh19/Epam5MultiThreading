@@ -1,6 +1,6 @@
-package entity.comparator;
+package com.epam.task5.entity.comparator;
 
-import entity.factory.Van;
+import com.epam.task5.entity.factory.Van;
 
 import java.util.Comparator;
 

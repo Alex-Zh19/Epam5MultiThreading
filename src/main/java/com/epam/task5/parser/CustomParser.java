@@ -1,4 +1,4 @@
-package parser;
+package com.epam.task5.parser;
 
 import java.util.List;
 

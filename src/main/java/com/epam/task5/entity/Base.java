@@ -1,4 +1,4 @@
-package entity;
+package com.epam.task5.entity;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

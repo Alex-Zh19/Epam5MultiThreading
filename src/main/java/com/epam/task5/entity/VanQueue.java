@@ -1,8 +1,8 @@
-package entity;
+package com.epam.task5.entity;
 
-import entity.comparator.PerishableComparator;
-import entity.factory.Van;
-import entity.factory.VanFactory;
+import com.epam.task5.entity.comparator.PerishableComparator;
+import com.epam.task5.entity.factory.Van;
+import com.epam.task5.entity.factory.VanFactory;
 
 import java.util.*;
 import java.util.concurrent.Callable;

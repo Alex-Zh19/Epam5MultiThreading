@@ -1,4 +1,4 @@
-package exception;
+package com.epam.task5.exception;
 
 public class MultiThreadingException extends Exception {
     public MultiThreadingException() {

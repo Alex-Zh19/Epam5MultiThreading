@@ -1,7 +1,7 @@
-package entity.factory;
+package com.epam.task5.entity.factory;
 
-import entity.VanState;
-import util.IdGenerator;
+import com.epam.task5.entity.VanState;
+import com.epam.task5.util.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.List;

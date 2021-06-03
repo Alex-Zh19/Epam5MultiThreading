@@ -1,8 +1,8 @@
-package reader.impl;
+package com.epam.task5.reader.impl;
 
-import exception.MultiThreadingException;
+import com.epam.task5.exception.MultiThreadingException;
 import org.testng.annotations.Test;
-import reader.CustomReader;
+import com.epam.task5.reader.CustomReader;
 
 import java.io.File;
 import java.net.URL;

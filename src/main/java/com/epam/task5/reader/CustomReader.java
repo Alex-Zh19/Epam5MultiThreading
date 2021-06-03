@@ -1,6 +1,6 @@
-package reader;
+package com.epam.task5.reader;
 
-import exception.MultiThreadingException;
+import com.epam.task5.exception.MultiThreadingException;
 
 import java.util.List;
 

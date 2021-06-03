@@ -1,14 +1,14 @@
-package main;
+package com.epam.task5.main;
 
-import entity.Base;
-import entity.Terminal;
-import entity.VanQueue;
-import entity.factory.VanFactory;
-import exception.MultiThreadingException;
-import parser.CustomParser;
-import parser.impl.TextParser;
-import reader.CustomReader;
-import reader.impl.TextReader;
+import com.epam.task5.entity.Base;
+import com.epam.task5.entity.Terminal;
+import com.epam.task5.entity.VanQueue;
+import com.epam.task5.entity.factory.VanFactory;
+import com.epam.task5.exception.MultiThreadingException;
+import com.epam.task5.parser.CustomParser;
+import com.epam.task5.parser.impl.TextParser;
+import com.epam.task5.reader.CustomReader;
+import com.epam.task5.reader.impl.TextReader;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -40,9 +40,9 @@ public class Main {
         try {
             vanQueue.startVanUploading();
         }catch (InterruptedException e){
-            System.out.println("interrupted exception");
+            System.out.println("interrupted com.epam.task5.exception");
         }catch (ExecutionException e){
-            System.out.println("execution exception");
+            System.out.println("execution com.epam.task5.exception");
         }
     }
 }

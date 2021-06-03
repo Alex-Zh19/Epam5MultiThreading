@@ -1,8 +1,8 @@
-package entity.factory;
+package com.epam.task5.entity.factory;
 
 
-import entity.Base;
-import entity.VanState;
+import com.epam.task5.entity.Base;
+import com.epam.task5.entity.VanState;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

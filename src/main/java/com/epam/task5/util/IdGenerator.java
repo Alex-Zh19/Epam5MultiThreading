@@ -1,4 +1,4 @@
-package util;
+package com.epam.task5.util;
 
 public class IdGenerator {
     private static int vanId = 0;

@@ -1,6 +1,6 @@
-package parser.impl;
+package com.epam.task5.parser.impl;
 
-import parser.CustomParser;
+import com.epam.task5.parser.CustomParser;
 
 import java.util.ArrayList;
 import java.util.List;
